@@ -6,6 +6,7 @@ var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 /**
  * Env
@@ -15,7 +16,7 @@ var ENV = process.env.npm_lifecycle_event;
 var isTest = ENV === 'test' || ENV === 'test-watch';
 var isProd = ENV === 'build';
 
-module.exports = function makeWebpackConfig () {
+module.exports = function makeWebpackConfig() {
   /**
    * Config
    * Reference: http://webpack.github.io/docs/configuration.html
@@ -151,7 +152,7 @@ module.exports = function makeWebpackConfig () {
    * List: http://webpack.github.io/docs/list-of-plugins.html
    */
   config.plugins = [];
-
+  console.log(__dirname);
   // Skip rendering index.html in test mode
   if (!isTest) {
     // Reference: https://github.com/ampedandwired/html-webpack-plugin
@@ -165,7 +166,19 @@ module.exports = function makeWebpackConfig () {
       // Reference: https://github.com/webpack/extract-text-webpack-plugin
       // Extract css files
       // Disabled when in test mode or not in build mode
-      new ExtractTextPlugin('[name].[hash].css', {disable: !isProd})
+      new ExtractTextPlugin('[name].[hash].css', {
+        disable: !isProd
+      }),
+
+      new BrowserSyncPlugin({
+        // browse to http://localhost:3000/ during development,
+        // ./public directory is being served
+        host: 'localhost',
+        port: 3000,
+        server: {
+          baseDir: [__dirname + '/src/app']
+        }
+      })
     )
   }
 

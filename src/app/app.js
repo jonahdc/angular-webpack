@@ -1,11 +1,17 @@
 import angular from 'angular';
 
+import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+
 import '../style/app.css';
+
+import routing from './app.config';
+import moduleA from '../modules/module-a';
+
+import uirouter from 'angular-ui-router';
 
 let app = () => {
   return {
     template: require('./app.html'),
-    controller: 'AppCtrl',
     controllerAs: 'app'
   }
 };
@@ -18,8 +24,8 @@ class AppCtrl {
 
 const MODULE_NAME = 'app';
 
-angular.module(MODULE_NAME, [])
+angular.module(MODULE_NAME, [uirouter, moduleA])
   .directive('app', app)
-  .controller('AppCtrl', AppCtrl);
+  .config(routing);
 
 export default MODULE_NAME;
